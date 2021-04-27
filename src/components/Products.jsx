@@ -1,7 +1,7 @@
 import React from 'react'
-import formatCurrency from '../../util'
+import formatCurrency from '../util'
 
-const Products = ({products}) => {
+const Products = ({products, addToCart}) => {
     return (
         <React.Fragment>
             <ul className="products">
@@ -16,7 +16,7 @@ const Products = ({products}) => {
                             <div>
                                 {formatCurrency(product.price)}
                             </div>
-                            <button className="button primary"> Add To Cart </button>
+                            <button className="button primary" onClick={()=>addToCart(product)}> Add To Cart </button>
                         </div>
                     </div>
                 </li>

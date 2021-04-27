@@ -1,16 +1,47 @@
 import React,{useState} from 'react'
 import data from './Data.json'
-import Products from './components/products/Products'
-import Filter from './components/products/Filter'
+import Products from './components/Products'
+import Filter from './components/Filter'
+import Cart from './components/Cart'
 
 function App() {
   const [state, setstate] = useState({
     products: data.products,
+    cartItems: [],
     size: "",
     sort: ""
   })
+
+  const addToCart = (product) =>{
+    const cartItems = state.cartItems.slice()
+    let alreadyInCart = false
+    cartItems.forEach(item=>{
+      if(item._id === product._id){
+        item.count ++
+        alreadyInCart = true
+      }
+    })
+    if(!alreadyInCart){
+      cartItems.push({...product, count: 1}) 
+    }
+    setstate({
+      ...state,
+      cartItems: cartItems
+    })
+  }
+
+  const removeFromCart = (item) =>{
+    const cartItems = state.cartItems.slice()
+    setstate({
+      ...state,
+      cartItems: cartItems.filter((x)=> x._id !== item)
+    })
+    console.log(item)
+  }
+
   const sortProducts = (sort) =>{
     setstate({
+      ...state,
       sort: sort,
       products: data.products.slice().sort((a, b)=>(
         sort === 'lowest'?
@@ -24,11 +55,13 @@ function App() {
   const filterProducts = (size) =>{
     if( size === ""){
       setstate({
+        ...state,
         size: "",
         products: data.products
       })  
     }else{
       setstate({
+        ...state,
         size: size,
         products: data.products.filter( product => product.availableSizes.indexOf(size) >=0 )
       })
@@ -49,10 +82,16 @@ function App() {
               filterProducts={filterProducts}
               sortProducts={sortProducts}
             />
-            <Products products={state.products} />
+            <Products
+              addToCart={addToCart}
+              products={state.products}
+            />
           </div>
           <div className="sidebar">
-            Sidebar
+            <Cart
+              cartItems={state.cartItems}
+              removeFromCart={removeFromCart}
+            />
           </div>
         </div>
       </main>
