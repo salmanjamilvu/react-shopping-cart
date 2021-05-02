@@ -1,11 +1,14 @@
 import React from 'react'
 import formatCurrency from '../util'
+import Fade from 'react-reveal/Fade'
 
-const Products = ({products, addToCart}) => {
+const Products = (props) => {
+    const {Data, addProductsHandle} = props
     return (
         <React.Fragment>
+            <Fade bottom cascade>
             <ul className="products">
-                {products.map((product)=>(
+                {Data.map((product)=>(
                 <li key={product._id}>
                     <div className="product">
                         <a href={"#" + product._id}>
@@ -16,12 +19,13 @@ const Products = ({products, addToCart}) => {
                             <div>
                                 {formatCurrency(product.price)}
                             </div>
-                            <button className="button primary" onClick={()=>addToCart(product)}> Add To Cart </button>
+                            <button className="button primary" onClick={()=>addProductsHandle(product)}> Add To Cart </button>
                         </div>
                     </div>
                 </li>
                 ))}    
             </ul>
+            </Fade>
         </React.Fragment>
     )
 }
